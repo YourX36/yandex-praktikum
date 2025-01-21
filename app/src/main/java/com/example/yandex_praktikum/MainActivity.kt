@@ -3,18 +3,20 @@ package com.example.yandex_praktikum
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import com.example.yandex_praktikum.ui.jetpack.CustomViewJetpackContainer
 import com.example.yandex_praktikum.ui.theme.YandexpraktikumTheme
-import com.example.yandex_praktikum.ui.views.CustomViewGroup
 
 class XmlActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,29 +36,30 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             YandexpraktikumTheme {
-                CustomViewGroupContainer()
+                CustomViewJetpackContainer(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    firstChild = {
+                        Box(
+                            modifier = Modifier
+                                .size(100.dp)
+                                .background(Color.Red)
+                        ) {
+                            Text("Первый элемент")
+                        }
+                    },
+                    secondChild = {
+                        Box(
+                            modifier = Modifier
+                                .size(100.dp)
+                                .background(Color.Blue)
+                        ) {
+                            Text("Второй элемент")
+                        }
+                    }
+                )
             }
         }
     }
-}
-@Preview
-@Composable
-fun CustomViewGroupContainer() {
-    AndroidView(
-        factory = { context ->
-            CustomViewGroup(context).apply {
-                val childView1 = TextView(context).apply {
-                    text = "Первый элемент"
-                }
-                val childView2 = TextView(context).apply {
-                    text = "Второй элемент"
-                }
-
-                addView(childView1)
-                addView(childView2)
-            }
-        },
-        modifier = Modifier.fillMaxSize()
-    )
 }
 

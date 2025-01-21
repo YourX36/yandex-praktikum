@@ -2,6 +2,7 @@ package com.example.yandex_praktikum.ui.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.view.ViewGroup
 
 class CustomViewGroup @JvmOverloads constructor(
@@ -29,6 +30,11 @@ class CustomViewGroup @JvmOverloads constructor(
         setMeasuredDimension(resolvedWidth, resolvedHeight)
     }
 
+    override fun addView(child: View?) {
+        if (childCount > 2) throw IllegalStateException("CustomViewGroup может содержать только два дочерних элемента")
+        super.addView(child)
+    }
+
     override fun onLayout(
         changed: Boolean,
         leftPosition: Int,
@@ -36,7 +42,6 @@ class CustomViewGroup @JvmOverloads constructor(
         rightPosition: Int,
         bottomPosition: Int
     ) {
-        if (childCount > 2) throw IllegalStateException("CustomViewGroup может содержать только два дочерних элемента")
 
         val parentWidth = rightPosition - leftPosition
         val parentCenterY = (topPosition + bottomPosition) / 2
@@ -56,12 +61,18 @@ class CustomViewGroup @JvmOverloads constructor(
 
             childView.layout(childLeftPosition, parentCenterY, childLeftPosition + childWidth, parentCenterY + childHeight)
 
-            childView.alpha = 0f
+            childView.alpha = ALPHA_START
             childView.animate()
                 .y(childTopPosition.toFloat())
-                .alpha(1f)
-                .setDuration(5000)
+                .alpha(ALPHA_END)
+                .setDuration(ANIMATION_DURATION)
                 .start()
         }
+    }
+
+    companion object {
+        const val ALPHA_START = 0F
+        const val ALPHA_END = 1f
+        const val ANIMATION_DURATION = 5000L
     }
 }
